@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12">
+        <table id="albums" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Author</th>
+                    <th>Vote</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    var table = $('#albums').DataTable({
+        "serverSide": true,
+        "ajax": "/articles/?format=datatables",
+        "columns": [
+            {"data": "title"},
+            {"data": "content"},
+            {"data": "author"},
+            {"data": "vote"},
+        ]
+    });
+    $('.btn-decade').on('click', function() {
+        table.columns().search('');
+        var rel = $(this).attr('rel');
+        if (rel) {
+            table.columns(3).search('^' + rel + '[0-9]$', true).draw();
+        } else {
+            table.draw();
+        }
+    });
+    
+});
+</script>
+{% endblock %}
